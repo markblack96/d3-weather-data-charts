@@ -1,3 +1,7 @@
+const months = [
+  "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"  
+];
+
 // Define margins
 var margins = {
     top: 30, right: 20, bottom: 30, left: 50
@@ -7,8 +11,8 @@ var margins = {
 var parseTime = d3.timeParse("%Y-%m");
 
 // Scales for axes
-var x = d3.scaleTime()
-            .range([0, width])//.tickFormat(d3.timeFormat("%B"))
+var x = d3.scaleLinear().domain([0,11])
+            .range([0, width]);//.tickFormat(d3.timeFormat("%B"))
             
 var y = d3.scaleLinear().range([height, 0]);
 
@@ -41,7 +45,7 @@ d3.csv("weather_data.csv",
         };
     }).then(function(data){
         
-        x.domain(d3.extent(data, function(d) {return (d.date.getMonth());}));
+        x.domain([0, 11]);
         
         y.domain([0, d3.max(data, function(d) { return d.tavg; })]);
         
@@ -65,7 +69,7 @@ d3.csv("weather_data.csv",
         // Add our axes
         svg.append("g")
             .attr("transform", "translate(0,"+height+")")
-            .call(d3.axisBottom(x).ticks(12).tickFormat(d3.timeFormat("%b")));
+            .call(d3.axisBottom(x).tickFormat(d => months[d])); //.ticks(12)); // .tickFormat(d3.timeFormat("%b"))
             
         svg.append("g")
             .call(d3.axisLeft(y).ticks(4));

@@ -5,8 +5,8 @@ const months = [
 // Define margins
 var margins = {
     top: 30, right: 20, bottom: 30, left: 50
-}, width = 600 - margins.left - margins.right,
-   height = 270 - margins.top - margins.bottom;
+}, width = 720 - margins.left - margins.right,
+   height = 480 - margins.top - margins.bottom;
 
 var parseTime = d3.timeParse("%Y-%m");
 
@@ -22,8 +22,9 @@ var weather_line = d3.line()
                         .y(function(d) { return y(d.tavg);});
 
 var color = d3.scaleLinear()
-                .domain([1939, 2018]).range(["orange", "red"]);
-
+				.domain([1939, 2018]).range(["yellow", "red"]);
+				
+				
 // Svg object
 var svg = d3.select("body").append("svg")
             .attr("width", width + margins.left + margins.right)
@@ -75,3 +76,14 @@ d3.csv("weather_data.csv",
             .call(d3.axisLeft(y).ticks(4));
         
     });
+	
+svg.append("g")
+	.attr("class", "legendLinear")
+	.attr("transform", "translate(20, 350)");
+	
+var legendLinear = d3.legendColor()
+					.shapeWidth(60)
+					.orient('horizontal')
+					.scale(color)
+					.labelFormat(d3.format('d')); //don't show decimals
+	svg.select(".legendLinear").call(legendLinear);
